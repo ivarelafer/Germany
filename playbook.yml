@@ -23,3 +23,15 @@
         name: docker-ce
         state: present
         update_cache: yes
+
+    - name: Copy config files to the working directory
+      command: cp -a /vagrant/* /root
+
+    - name: Pull alpine linux from repository
+      command: docker pull alpine
+
+    - name: Build a custom image from the dockerfile using alpine as template installing nginx
+      command: docker build -t alpine-custom .
+
+    - name: Run a docker instance based on the previous container, exposing port 80 and 443
+      command: docker run -p 8080 -p 443:443 --name ivandocker -v ~/etc/conf.d:/etc/nginx/conf.d alpine-custom
